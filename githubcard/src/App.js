@@ -13,11 +13,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.gitHubUser();
+    this.gitHubUser('mikeyjwilliams');
   }
 
-  gitHubUser = () => {
-    Axios.get(`https://api.github.com/users/mikeyjwilliams`)
+  gitHubUser = name => {
+    Axios.get(`https://api.github.com/users/${name}`)
       .then(res =>
         this.setState({
           github: res.data
@@ -40,12 +40,3 @@ class App extends Component {
   }
 }
 export default App;
-
-// bio
-// followers:
-// following_url: => link
-// location:
-// login
-// name
-// public repos
-// avatar_url  => image
