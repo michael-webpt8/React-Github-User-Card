@@ -8,7 +8,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      github: []
+      github: [],
+      githubFollowing: []
     };
   }
 
@@ -16,8 +17,14 @@ class App extends Component {
     this.gitHubUser('mikeyjwilliams');
   }
 
-  gitHubUser = name => {
-    Axios.get(`https://api.github.com/users/${name}`)
+  componentDidUpdate(preProps, prevState) {
+    if (prevState !== this.state.githubFollowing) {
+      this.followerListing(this.state.githubFollowing);
+    }
+  }
+
+  gitHubUser = () => {
+    Axios.get(`https://api.github.com/users/mikeyjwilliams`)
       .then(res =>
         this.setState({
           github: res.data
@@ -26,8 +33,26 @@ class App extends Component {
       .catch(err => console.log('Error', err));
   };
 
+  githubFollowers = () => {
+    Axios.get(`https://api.github.com/users/mikeyjwilliams/followers`)
+      .then(res =>
+        this.setState({
+          githubFollowing: res.data.map(user => {
+            return user.login;
+          })
+        })
+      )
+      .catch(err => console.log('Error ', err));
+  };
+
+  followerListing = (following = []) => {
+    {
+      const userData = following.map(user => this.gitHubUser(user));
+      console.log('follow', userData);
+    }
+  };
+
   render() {
-    console.log('data', this.state.github);
     return (
       <>
         <CssBaseline />
